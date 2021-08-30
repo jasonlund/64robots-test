@@ -2,12 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Notifications\PersonCreated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Person extends Model
 {
     use HasFactory;
+
+    /**
+     * Register PersonCreated Notification
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        Person::created(function ($model) {
+            Notification::route('slack', config('services.slack.webhook_url'))
+                ->notify(new PersonCreated($model));
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -5,11 +5,27 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Family;
 use App\Models\Person;
+use App\Notifications\PersonCreated;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class PersonTest extends TestCase
 {
     use DatabaseMigrations;
+
+    /**
+     @test
+     */
+    public function a_notification_is_fired_when_a_person_is_created()
+    {
+        Person::factory()->create();
+
+        Notification::assertSentTo(
+            new AnonymousNotifiable,
+            PersonCreated::class
+        );
+    }
 
     /**
      @test

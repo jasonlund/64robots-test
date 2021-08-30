@@ -6,8 +6,6 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Family;
 use App\Models\Person;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class PersonControllerTest extends TestCase
@@ -231,5 +229,27 @@ class PersonControllerTest extends TestCase
                     ]
                 ]
             ]);
+    }
+
+    /**
+     @test
+     *
+     * GET 'api/person/{person}'
+     */
+    public function a_guest_can_not_view_a_person_and_their_family()
+    {
+        $family = Family::factory()->create();
+        $person = Person::factory([
+            'family_id' => $family->id
+        ])
+            ->create();
+        $familyMembers = Person::factory([
+            'family_id' => $family->id
+        ])
+            ->count(10)
+            ->create();
+
+        $this->json('get', route('api.person.show', ['person' => $person->id]))
+            ->assertStatus(401);
     }
 }

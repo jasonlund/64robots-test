@@ -11,7 +11,7 @@ class FamilyTest extends TestCase
 {
     use DatabaseMigrations;
 
-   /**
+    /**
      @test
      */
     public function a_family_has_many_people()

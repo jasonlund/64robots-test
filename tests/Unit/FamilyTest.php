@@ -14,15 +14,14 @@ class FamilyTest extends TestCase
    /**
      @test
      */
-    public function a_family_belongs_to_many_people()
+    public function a_family_has_many_people()
     {
         $family = Family::factory()
             ->create();
-        $people = Person::factory()->count(2)->create();
-
-        $family->people()->syncWithPivotValues($people, [
+        Person::factory([
+            'family_id' => $family->id,
             'relationship' => 'Foobar'
-        ]);
+        ])->count(2)->create();
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $family->people);
         $this->assertInstanceOf('App\Models\Person', $family->people->first());

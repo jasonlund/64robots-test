@@ -18,11 +18,11 @@ use App\Http\Controllers\PersonController;
 
 Route::name('api.')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
-        Route::resource('person', PersonController::class)->only([
-            'store'
+        Route::apiResource('person', PersonController::class)->only([
+            'store', 'update'
         ]);
 
-        Route::resource('family', FamilyController::class)->only([
+        Route::apiResource('family', FamilyController::class)->only([
             'store'
         ]);
     });

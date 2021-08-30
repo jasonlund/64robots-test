@@ -23,6 +23,6 @@ class Family extends Model
      */
     public function people()
     {
-        return $this->belongsToMany(Person::class);
+        return $this->hasMany(Person::class);
     }
 }

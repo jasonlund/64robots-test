@@ -16,13 +16,15 @@ class Person extends Model
      */
     protected $fillable = [
         'name',
+        'family_id',
+        'relationship'
     ];
 
     /**
      * The families that belong to the person.
      */
-    public function families()
+    public function family()
     {
-        return $this->belongsToMany(Family::class);
+        return $this->belongsTo(Family::class);
     }
 }

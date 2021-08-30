@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FamilyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
@@ -18,6 +19,10 @@ use App\Http\Controllers\PersonController;
 Route::name('api.')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::resource('person', PersonController::class)->only([
+            'store'
+        ]);
+
+        Route::resource('family', FamilyController::class)->only([
             'store'
         ]);
     });

@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class PersonControllerTest extends TestCase
+class FamilyControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -17,29 +17,29 @@ class PersonControllerTest extends TestCase
      *
      * POST 'api/person'
      */
-    public function a_user_can_create_a_person()
+    public function a_user_can_create_a_family()
     {
         $this->actingAs(User::factory()->create());
 
-        $response = $this->json('post', route('api.person.store', [
-            'name' => 'John Doe'
+        $response = $this->json('post', route('api.family.store', [
+            'name' => 'Doe'
         ]))
             ->assertJson(['success' => true]);
 
         $response = json_decode($response->getContent());
 
-        $this->assertEquals('John Doe', $response->data->name);
+        $this->assertEquals('Doe', $response->data->name);
     }
 
     /**
      @test
      *
-     * POST 'api/person'
+     * POST 'api/family'
      */
-    public function a_guest_can_not_create_a_person()
+    public function a_guest_can_not_create_a_family()
     {
-        $this->json('post', route('api.person.store', [
-            'name' => 'John Doe'
+        $this->json('post', route('api.family.store', [
+            'name' => 'Doe'
         ]))
             ->assertStatus(401);
     }
@@ -47,13 +47,13 @@ class PersonControllerTest extends TestCase
     /**
      @test
      *
-     * POST 'api/person'
+     * POST 'api/family'
      */
-    public function a_persons_name_is_required()
+    public function a_familys_name_is_required()
     {
         $this->actingAs(User::factory()->create());
 
-        $this->json('post', route('api.person.store', []))
+        $this->json('post', route('api.family.store', []))
             ->assertJsonValidationErrors(['name']);
     }
 }

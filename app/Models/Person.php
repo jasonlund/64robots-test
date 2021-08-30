@@ -27,4 +27,13 @@ class Person extends Model
     {
         return $this->belongsTo(Family::class);
     }
+
+    /**
+     * The people that belong to the same family as the person, but not including the person themselves.
+     */
+    public function relatives()
+    {
+        return $this->hasManyThrough(Person::class, Family::class, 'id', 'family_id')
+            ->where('people.id', '!=', $this->id);
+    }
 }

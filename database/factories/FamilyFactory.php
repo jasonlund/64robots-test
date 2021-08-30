@@ -21,8 +21,10 @@ class FamilyFactory extends Factory
      */
     public function definition()
     {
+
+
         return [
-            'name' => ucwords($this->faker->name()),
+            'name' => ucwords($this->faker->name())
         ];
     }
 }

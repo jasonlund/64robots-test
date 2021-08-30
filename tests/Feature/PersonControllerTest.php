@@ -182,4 +182,54 @@ class PersonControllerTest extends TestCase
         ])
             ->assertJsonMissingValidationErrors(['relationship']);
     }
+
+    /**
+     @test
+     *
+     * GET 'api/person/{person}'
+     */
+    public function a_user_can_view_a_person_and_their_family()
+    {
+        $this->actingAs(User::factory()->create());
+
+        $family = Family::factory()->create();
+        $person = Person::factory([
+            'family_id' => $family->id
+        ])
+            ->create();
+        $familyMembers = Person::factory([
+            'family_id' => $family->id
+        ])
+            ->count(10)
+            ->create();
+
+        $this->json('get', route('api.person.show', ['person' => $person->id]))
+            ->assertJson([
+                'data' => [
+                    'person' => [
+                        'id' => $person->id
+                    ]
+                ]
+            ])
+            ->assertJson([
+                'data' => [
+                    'family_tree' => $familyMembers->groupBy('relationship')->map(function ($item) {
+                        return $item->map(function ($item) {
+                            return [
+                                'id' => $item->id
+                            ];
+                        });
+                    })->toArray()
+                ]
+            ])
+            ->assertJsonMissing([
+                'data' => [
+                    'family_tree' => [
+                        [
+                            'id' => $person->id
+                        ]
+                    ]
+                ]
+            ]);
+    }
 }
